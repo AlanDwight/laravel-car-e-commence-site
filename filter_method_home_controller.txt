@@ -1,0 +1,126 @@
+public function index(){
+        
+        // select all cars 
+        // $cars = Car::get();
+
+        // select specific cars base on table column name
+        // $cars = Car::where('year', '!=', '2020')->get();
+
+        // select first car
+        // $cars = Car::first();
+
+        // find car base on id 
+        // $cars = Car::find(2);
+
+        // sorting cars base on descending id 
+        // $cars = Car::orderBy('id', 'desc')->limit(2)->get();
+        
+        // combined filter
+        // $cars = Car::where('year', '!=', 'null')
+        //             ->where('user_id', '1')
+        //             ->where('address', 'test')
+        //             ->orderBy('id', 'desc')
+        //             ->limit(2)
+        //             ->get();
+
+        // dump($cars);
+
+        // insert new car in the database 
+
+        // $car = new Car();
+        // $car -> maker_id =1 ; 
+        // $car -> model_id = 1 ; 
+        // $car -> year = 2018; 
+        // $car -> price = 35000; 
+        // $car -> vin = 5;
+        // $car -> mileage = 123 ;   
+        // $car -> car_type_id = 1;
+        // $car -> fuel_type_id = 1;
+        // $car -> user_id =1 ; 
+        // $car -> city_id = 1; 
+        // $car -> address = 'test'; 
+        // $car -> phone = '12345';
+        // $car -> description = null; 
+        // $car -> published_at = now(); 
+        // $car -> save();
+
+
+        $carData = [
+            'maker_id' => 2,
+            'model_id' => 2,
+            'year' => 2017,
+            'price' => 45000,
+            'vin' => 6,
+            'mileage' => 133,
+            'car_type_id' => 1,
+            'fuel_type_id' => 1,
+            'user_id' => 1,
+            'city_id' => 1,
+            'address' => 'test',
+            'phone' => '12345',
+            'description' => null,
+            'published_at' => now(),
+        ];
+        // approach one 
+        // $car = Car::create($carData); 
+
+        // approach two 
+        // $car2 = new Car(); 
+        // $car2->fill($carData);
+        // $car2->save();
+
+        // approach three
+        // $car3 = new Car($carData);
+        // $car3->save();
+
+        // update specfic attribute or data from column 
+        // base on id
+        // update data  
+        $car = Car::find(1); 
+        $car->price = 1000; 
+        $car->save();
+        
+        $carData2 = [
+            'maker_id' => 2,
+            'model_id' => 2,
+            'year' => 2017,
+            'price' => 135000,
+            'vin' => 7,
+            'mileage' => 133,
+            'car_type_id' => 1,
+            'fuel_type_id' => 1,
+            'user_id' => 1,
+            'city_id' => 1,
+            'address' => 'test',
+            'phone' => '12345',
+            'description' => null,
+            'published_at' => now(),
+        ];
+        
+        // update or create using updateOrCreate method
+        // need to pass two array
+        // first one is filter associated array
+        // second one is updated data
+
+        // Car::updateOrCreate([
+        //     'vin' => '7', 
+        //     'price' => 45000, 
+        // ],[
+        //     'price' => 55000,
+        // ]);
+
+        // Car::updateOrCreate([
+        //     'vin' => '7', 
+        //     'price' => 45000, 
+        // ],
+        //     $carData2
+        // );
+
+	// mass update data base on filter 
+        Car::where('published_at', null)
+            ->where('user_id', 1)
+            ->update(['published_at' => now(),]);
+
+        return view("home.index");
+    }
+}

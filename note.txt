@@ -1,0 +1,194 @@
+clean -> app -> index
+
+@section 
+@show 
+@parents
+
+@sectionMissing('isMissing')
+@endif
+
+@checked('BOOLEAN') if boolean true return checked else null 
+@disabled('BOOLEAN') if boolean true return disable else null 
+@readonly('BOOLEAN') ......readyonly....null 
+@required('BOOLEAN')
+@selected('BOOLEAN') return selected
+
+php artisan make:component button --view  # creating anonymous component #we don't want component class to be generated only view file # no app/view/component/button.php 
+# only button.blade.php
+
+component slots
+-default slot
+-named slot
+
+class based components make class with pascal case SearchForm
+
+php artisan make:component SearchForm
+
+#inline component 
+
+php artisan make:component TestComponent --inline
+
+php artisan list migrate # show available commands and options 
+php artisan migrate:reset #resetting all the tables in database
+php artisan migrate   #apply migration 
+
+#create new table in database
+php artisan make:migration <migration file name> # naming convention  create_name_of_your_dbTable_table
+
+php artisan migrate --pretend  # allow us to pretend to see sql query code/command
+
+# rollback migration 
+
+php artisan migrate:rollback
+php artisan migrate:rollback --step=3 # three steps rollback
+php artisan migrate:rollback --batch=2 # rolling back by specifying batch
+php artisan migrate:rollback --pretend
+
+php artisan migrate:refresh --step=3
+php artisan migrate:fresh # drop all tables and rerun all migration 
+
+
+# generate eloquent model class
+
+php artisan make:model FuelType <pascalcase naming>
+
+php artisan make:model FuelType -mc <m for model generation c for controller generation>
+
+php artisan model:show FuelType # viewing eloquent model
+
+laravel always assume id as a primary key for the table
+
+// customizing model for table mapping 
+    // check with php artisan model:show FuelType
+    
+    // protected $table = 'car_fuel_types'; 
+
+    // customizing primary key default would be 'id' as primary key from 
+    // 'fuel_types' migration table but we can redefine it by
+    
+    // protected $primaryKey = 'fuel_type_id';
+
+// disabling auto incrementing primary key 
+    // public $incrementing = false;
+
+    // change primary key data type from 'int' to 'str'
+    // protected $keyType = 'string';
+
+
+migrate:fresh or refresh will loose the table data in database
+
+orm relationship 
+
+hasOne 
+hasMany
+belongsTo
+belongsToMany
+
+oneOfMany
+	latestOfMany
+	oldestOfMany
+
+hasOneThrough
+
+# Seeders
+
+php artisan db:seed #run default seeder DatabaseSeeder
+php artisan db:seed --class=CustomSeeder  #run custom seeder
+php artisan db:seed --force # force seeding in production
+php artisan migrate --seed # seeding while migrating (only default seeder class)
+
+# query data without model
+# when we don't have a model for the table 
+# using DB support class 
+Illuminate\Support\Facades\DB
+
+$cars = DB::table('cars')->get();
+
+# if we have a model then ... 
+$query = Car::query();
+
+# any method from query orderBy, limit, where ...
+
+$car = Car::get();
+$car = Car::first();
+$highestPrice = Car::orderBy('price', 'desc')->value('price'); # return one value 
+$prices = Car::order('price','desc')-> pluck('price'); # return list of prices, 1d array 
+
+# return associated array car 'id' as a key 
+$prices = Car::order('price', 'desc')->pluck('price','id');
+
+# exist or not 
+
+if(Car::where('user_id',1)-> exists()){
+}
+
+
+if(Car::where('user_id',1)-> doesntExists()){
+}
+
+# select
+
+$cars = Car :: select('vin', 'price as car_price')->get(); 
+$query = Car :: select('vin', 'price as car_price'); 
+$cars = $query-> addSelect('mileage')->get();
+
+# getting distinct record from database 
+
+$distinct = Car::select('maker_id', 'model_id') -> distinct() -> get(); 
+
+# limit and offset 
+# limit 10 cars start from 6th car
+
+$cars = Car::limit(10)->offset(6)->get();
+
+# skip and take, same as above 
+
+$cars = Car::skip(5)->take(10)->get();
+
+# counting cars that are already published 
+
+$publishedCars = Car::where('published_at', '!=' , null)->count();
+
+# getting published cars' prices base on min, max and avg
+
+$minPrice = Car::where('published_at', '!=', null)->min('price');
+$maxPrice = Car::where('published_at', '!=', null)->max('price');
+$averagePrice = Car::where('published_at', '!=', null)-> avg('price'); 
+
+# grouping 
+
+$cars = CarImage::selectRaw('car_id', 'count(*) as image_count')->groupBy('car_id')->get();
+
+# order by multiple column 
+
+$cars = Car::orderBy('published_at', 'desc') -> orderBy('price'-> 'asc')->get();
+
+# latest and get
+
+$latestOne = Car::latest()->get(); # same as  $latestOne = Car::orderBy('created_at','desc')->get();
+
+# oldest and get 
+
+$oldestOne = Car::oldest()->get(); # same as $oldestone = Car::orderBy('created_at', 'asc')->get();
+
+# passing an column arg to latest and oldest method
+
+Car::latest('published_at')->get();
+
+# get record in random order 
+
+$randomCar = Car::inRandomOrder()->get();
+
+# remove ordering or reorder 
+# reorder() remove existing ordering
+# apply new ordering by orderBy()
+
+$query = Car::orderBy('published_at', 'desc'); 
+
+$cars = $query->reorder()->orderBy('price')->get();
+
+#or 
+
+$cars = $query->reorder('price')->get();
+
+
