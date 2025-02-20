@@ -119,22 +119,22 @@
 
     <!-- Home Slider -->
     <main>
-    <!-- Find a car form -->
-    <x-search-form action="/s.html" method="GET" />
-    <!--/ Find a car form -->
+      <!-- Find a car form -->
+      <x-search-form action="/s.html" method="GET" />
+      <!--/ Find a car form -->
 
-    <!-- New Cars -->
-    <section>
-        <div class="container">
-        <h2>Latest Added Cars</h2>
-        <div class="car-items-listing">
-        @foreach ($cars as $car)
-            <x-car-item :car=$car  />
-        @endforeach
-        </div>
-        </div>
-    </section>
-    <!--/ New Cars -->
+      <!-- New Cars -->
+      <section>
+          <div class="container">
+          <h2>Latest Added Cars</h2>
+          <div class="car-items-listing">
+          @foreach ($cars as $car)
+              <x-car-item :car=$car/>
+          @endforeach
+          </div>
+          </div>
+      </section>
+      <!--/ New Cars -->
     </main>
 
     <x-slot:footerLinks>

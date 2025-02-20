@@ -482,7 +482,9 @@ class HomeController extends Controller
         //     // ->hasAttached(Car::factory()->count(5),['col_1' => 'value', 'col_2' => 'value'])
         //     ->create();
 
+        // adding eager loading
         $cars = Car::where('published_at', '<', now())
+                    ->with(['primaryImage', 'city', 'maker','model', 'carType', 'fuelType'])
                     ->orderBy('published_at', 'desc')
                     ->limit(30)
                     ->get();

@@ -26,6 +26,7 @@ Route::get('/userLogin', [LoginController ::class,'login'])->name('userLogin');
 // Route::get('/guest', [GuestController ::class,'index'])->name('guest');
 
 Route::get('/cars/search', [CarController::class,'search'])->name('cars.search');
+Route::get('/cars/watchlist', [CarController::class,'watchlist'])->name('cars.watchlist');
 Route::resource('cars', CarController::class);
 
 

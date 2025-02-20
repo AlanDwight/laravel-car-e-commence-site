@@ -61,7 +61,7 @@
                 <a href={{route("cars.index")}}>My Cars</a>
               </li>
               <li>
-                <a href="watchlist.html">My Favourite Cars</a>
+                <a href={{route('cars.watchlist')}}>My Favourite Cars</a>
               </li>
               <li>
                 <form action="#" method="post">

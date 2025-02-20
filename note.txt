@@ -191,4 +191,41 @@ $cars = $query->reorder()->orderBy('price')->get();
 
 $cars = $query->reorder('price')->get();
 
+# using eager loading fix the performance issue
+# e.g $car->city->name
+# $car->carType->name
 
+$cars = Car::with(['city', 'carType'])->limit(5)->get(); 
+
+# nested relation
+# e.g $car->city->state->name
+
+$cars = Car::with(['city.state'])->limit(5)->get(); 
+
+$cars = Car::with(['city=>['state']', 'carType'])->limit(5)->get(); 
+
+# defaulting eager loading in Car Model
+
+protected $with = ['city.state', 'carType', 'fuelType']
+
+# constraining eager loads
+
+$cars = Car::with(['images' => function($query){
+	$query->where('position',1);
+}])->limit(5)->get();
+
+# built in php server 
+
+php -S localhost:8000 -t public/
+
+# advanced join clause
+
+$query->join('car_images', function(JoinClause $join){
+	$join->on('cars.id', '=', 'car_images.car_id')
+		->or on('second condition')
+	->where('car_images.position', '=', 1);
+}
+
+# to edit the vendor ready views 
+
+php .\artisan vendor:publish --tag=laravel-pagination
